@@ -12,6 +12,9 @@ pandas = "*"
 seaborn = "*"
 scikit-learn = "*"
 numpy = "*"
+opencv-python = "*"
+xgboost = "*"
+evalml = "*"
 
 [dev-packages]
 
