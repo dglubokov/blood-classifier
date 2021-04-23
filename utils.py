@@ -22,28 +22,15 @@ def fetcher(key: str):
                 shutil.move(str(cell_path), f'./cells/{key}/')
 
 
-def dir_checker(path: str):
-    result = {}
+def dir_checker(path: str, size: int):
+    result = []
     data_dir = pathlib.Path(f'{path}')
     for p_dir in data_dir.iterdir():
         counter = [1 for x in list(os.scandir(p_dir)) if x.is_file()]
-        if len(counter) > 100:
-            sep_dir = str(p_dir).split(sep='/')
+        if len(counter) > size:
             # print(p_dir, len(counter))
-            result[sep_dir[1]] = len(counter)
+            result.append(str(p_dir))
     return result
-
-
-def counter_helper():
-    old = dir_checker(path='./old_data')
-    new = dir_checker(path='./cells')
-
-    merge = {}
-    for k, v in new.items():
-        if k in old:
-            merge[k] = v + old[k]
-
-    return merge
 
 
 def random_fill_dir(ds_size, dir_name, paths, other_check_set=set()):
@@ -61,43 +48,28 @@ def random_fill_dir(ds_size, dir_name, paths, other_check_set=set()):
     return check_set
 
 
-def sampler(data_path: str, ratio_train: float, case: str):
-    """Сборщик сэмплов."""
-    data_dir = pathlib.Path(f'{data_path}')
-    merged_cells_info = counter_helper()
-    cell_types = list(merged_cells_info.keys())
-    min_size = min(list(dir_checker(path=data_path).values()))
-    for name in cell_types:
-        cells_paths = list(data_dir.glob(f'./{name}/*.bmp'))
+def resampler(path: str, size: int, save_to: str, image_format: str = '.bmp'):
+    result = dir_checker(path, size)
+    save_path = save_to + 'resampled/'
+    os.makedirs(save_path, exist_ok=True)
 
-        # Формирование тренировочной выборки
-        path_to_train = f'./img_data/{case}/train/{name}/'
-        os.makedirs(path_to_train, exist_ok=True)
-        train_size = int(min_size * ratio_train)
-        train_cells = random_fill_dir(
-            ds_size=train_size,
-            dir_name=path_to_train,
-            paths=cells_paths,
-        )
+    for c in result:
+        class_name = c.split(sep='/')[-1] + '/'
 
-        # Формирование тестовой выборки
-        path_to_test = f'./img_data/{case}/test/{name}/'
-        os.makedirs(path_to_test, exist_ok=True)
-        test_size = int(min_size * (1 - ratio_train))
+        data_dir = pathlib.Path(path)
+        cells_paths = list(data_dir.glob(f'{class_name}*{image_format}'))
+        
+        class_new_path = save_path+class_name
+        os.makedirs(class_new_path, exist_ok=True)
         random_fill_dir(
-            ds_size=test_size,
-            dir_name=path_to_test,
-            paths=cells_paths,
-            other_check_set=train_cells,
+            ds_size=size,
+            dir_name=class_new_path,
+            paths=cells_paths, 
         )
-
 
 if __name__ == "__main__":
-    # fetcher(key=sys.argv[1])
-    # dir_checker()
-    # counter_helper()
-    sampler(
-        data_path='./cells',
-        ratio_train=0.8,
-        case='new'
+    resampler(
+        path='./data/cells/',
+        size=500,
+        save_to='./data/'
     )
