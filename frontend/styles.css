@@ -1,0 +1,43 @@
+body {
+    font-family: Helvetica;
+    background-color: #f4f4f4;
+    color: #555;
+    line-height: 1.6em;
+  }
+  
+h1 {
+    color: rgb(0, 0, 0);
+    text-align: center;
+}
+
+#imgLoaderForm {
+    text-align: center;
+}
+
+#inpImage {
+    margin: 1em;
+}
+
+#upload {
+    background-color: #af4c4c;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition-duration: 0.4s;
+}
+
+#upload:hover {
+    background-color: #d35a5a; /* Green */
+    color: white;
+  }
+
+.results {
+    text-align: center;
+}
