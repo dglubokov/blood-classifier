@@ -14,7 +14,7 @@ imgLoaderForm.addEventListener('submit', e => {
         reader.readAsDataURL(file);
 
         const formData = new FormData();
-        const endpoint = 'http://127.0.0.1:8082/uploadfile/';
+        const endpoint = 'http://127.0.0.1:8082/test/';
         formData.append('file', file);
         fetch(endpoint, {
             method: 'POST',
