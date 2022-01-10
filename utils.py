@@ -1,4 +1,3 @@
-import sys
 import os
 import pathlib
 import shutil
@@ -58,14 +57,15 @@ def resampler(path: str, size: int, save_to: str, image_format: str = '.bmp'):
 
         data_dir = pathlib.Path(path)
         cells_paths = list(data_dir.glob(f'{class_name}*{image_format}'))
-        
-        class_new_path = save_path+class_name
+
+        class_new_path = save_path + class_name
         os.makedirs(class_new_path, exist_ok=True)
         random_fill_dir(
             ds_size=size,
             dir_name=class_new_path,
             paths=cells_paths, 
         )
+
 
 if __name__ == "__main__":
     resampler(
