@@ -10,15 +10,19 @@ h1 {
     text-align: center;
 }
 
-#imgLoaderForm {
+p {
+    font-weight: bold;
+}
+
+form {
     text-align: center;
 }
 
-#inpImage {
+#inputFile {
     margin: 1em;
 }
 
-#upload {
+button {
     background-color: #af4c4c;
     border: none;
     color: white;
@@ -26,14 +30,14 @@ h1 {
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
+    font-size: 13px;
     margin: 4px 2px;
     cursor: pointer;
     border-radius: 4px;
     transition-duration: 0.4s;
 }
 
-#upload:hover {
+button:hover {
     background-color: #d35a5a; /* Green */
     color: white;
   }
