@@ -1,23 +1,21 @@
 import os
 import zipfile
-import shutil
 from pathlib import Path
 
 import uvicorn
+import pandas as pd
+import numpy as np
 from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware import Middleware
 from fastapi.middleware.cors import CORSMiddleware
-import pandas as pd
 from starlette.responses import FileResponse
-import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
-import numpy as np
-
-import cnn_check
 
 
+import inference
 
-DATA_DIR_NAME = 'datasets'
+
+DATA_DIR_NAME = Path('datasets')
 
 middleware = [
     Middleware(
@@ -36,28 +34,23 @@ app = FastAPI(
 )
 
 
-@app.post("/upload/")
+@app.post("/classify/")
 def infer(file: UploadFile = File(...)):
     f_name = file.filename.split('.')
     content_type = file.content_type.split('/')
     if 'zip' not in f_name and 'zip' not in content_type:
         return {'class_name': 'Wrong file format!'}
 
-    if os.path.isdir(DATA_DIR_NAME):
-        shutil.rmtree(DATA_DIR_NAME)
-    os.mkdir(DATA_DIR_NAME)
+    if not os.path.isdir(DATA_DIR_NAME):
+        os.mkdir(DATA_DIR_NAME)
 
-    bf = file.file.read()
-    with open('ds.zip', 'wb') as f:
-        f.write(bf)
-
-    with zipfile.ZipFile('ds.zip', 'r') as zip:
+    with zipfile.ZipFile(file.file.read(), 'rb') as zip:
         zip.extractall(DATA_DIR_NAME)
 
-    results = list()
-    main_path = Path(DATA_DIR_NAME) / ''.join(f_name[:-1])
-    for p in main_path.iterdir():
-        class_name = cnn_check.classify(p)
+    results = []
+    samples_path = DATA_DIR_NAME / ''.join(f_name[:-1])
+    for p in samples_path.iterdir():
+        class_name = inference.classify(p)
         results.append({
             'path': p.name,
             'class_name': class_name,
@@ -68,7 +61,7 @@ def infer(file: UploadFile = File(...)):
     d.to_csv('summary.tsv', sep='\t')
 
 
-@app.get('/download/')
+@app.get('/download-results/')
 def download():
     return FileResponse(
         'results.tsv',
