@@ -24,7 +24,7 @@ export default function DragSpace(props: Props) {
         var original = document.getElementById(data);
         console.log(data)
         console.log(original)
-        copyimg.src = original.children[0].src;
+        // copyimg.src = original.children[0].src;
         console.log(ev.target.children.length);
         if (ev.target.children.length > 0){
             ev.target.children.shift();

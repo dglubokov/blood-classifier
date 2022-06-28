@@ -63,7 +63,7 @@ def resampler(path: str, size: int, save_to: str, image_format: str = '.bmp'):
         random_fill_dir(
             ds_size=size,
             dir_name=class_new_path,
-            paths=cells_paths, 
+            paths=cells_paths,
         )
 
 

@@ -29,12 +29,12 @@ middleware = [
 
 
 app = FastAPI(
-    title='Blood classifier API',
-    middleware=middleware,
+    title="Blood classifier API",
+    middleware=middleware
 )
 
 
-@app.post("/classify/")
+@app.post("/classify/", tags=["Endpoints"])
 def infer(file: UploadFile = File(...)):
     f_name = file.filename.split('.')
     content_type = file.content_type.split('/')
@@ -61,7 +61,7 @@ def infer(file: UploadFile = File(...)):
     d.to_csv('summary.tsv', sep='\t')
 
 
-@app.get('/download-results/')
+@app.get('/download-results/', tags=["Endpoints"])
 def download():
     return FileResponse(
         'results.tsv',
@@ -70,7 +70,7 @@ def download():
     )
 
 
-@app.get('/download-summary/')
+@app.get('/download-summary/', tags=["Endpoints"])
 def download_summary():
     d = pd.read_table('summary.tsv')
     fig = Figure(figsize=(10, 10))
@@ -87,7 +87,7 @@ def download_summary():
 if __name__ == "__main__":
     uvicorn.run(
         "main:app",
-        host="127.0.0.1",
+        host="0.0.0.0",
         port=8082,
         reload=False,
         debug=False,
