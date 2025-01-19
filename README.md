@@ -13,9 +13,6 @@ A machine learning-powered tool for classifying blood and bone marrow cells usin
 4. [Usage](#usage)
    - [Training](#training)
    - [System Usage](#system-usage)
-5. [Development](#development)
-6. [Contributing](#contributing)
-7. [License](#license)
 
 ---
 
